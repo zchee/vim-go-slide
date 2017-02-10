@@ -15,14 +15,14 @@ runtime! syntax/html.vim
 unlet! b:current_syntax
 
 
-if !exists('g:slide_fenced_languages')
-  let g:slide_fenced_languages = []
+if !exists('g:goslide_fenced_languages')
+  let g:goslide_fenced_languages = []
 endif
-for s:type in map(copy(g:slide_fenced_languages),'matchstr(v:val,"[^=]*$")')
+for s:type in map(copy(g:goslide_fenced_languages),'matchstr(v:val,"[^=]*$")')
   if s:type =~ '\.'
     let b:{matchstr(s:type,'[^.]*')}_subtype = matchstr(s:type,'\.\zs.*')
   endif
-  exe 'syn include @slideHighlight'.substitute(s:type,'\.','','g').' syntax/'.matchstr(s:type,'[^.]*').'.vim'
+  exe 'syn include @goslideHighlight'.substitute(s:type,'\.','','g').' syntax/'.matchstr(s:type,'[^.]*').'.vim'
   unlet! b:current_syntax
 endfor
 unlet! s:type
@@ -32,173 +32,173 @@ syn sync minlines=10
 syn case ignore
 
 
-" Slide Title:
+" goslide Title:
 " TODO(zchee): hardcoded line number
-syn match  slideTitle      '^\%1l.*$' contains=slideLineStart
-syn match  slideSubTitle   '^\%2l.*$' contains=slideLineStart
-syn match  slideDate       '^\%3l.*$' contains=slideLineStart
-syn match  slideTags       '^\%4l.*$' contains=slideLineStart
-syn match  slideName       '^\%6l.*$' contains=slideLineStart
-syn match  slideJobs       '^\%7l.*$' contains=slideLineStart
-syn match  slideMail       '^\%8l.*$' contains=slideLineStart
-syn match  slideAuthorUrl  '^\%9l.*$' contains=slideLineStart
-syn match  slideTwitter   '^\%10l.*$' contains=slideLineStart
+syn match  goslideTitle      '^\%1l.*$' contains=goslideLineStart
+syn match  goslideSubTitle   '^\%2l.*$' contains=goslideLineStart
+syn match  goslideDate       '^\%3l.*$' contains=goslideLineStart
+syn match  goslideTags       '^\%4l.*$' contains=goslideLineStart
+syn match  goslideName       '^\%6l.*$' contains=goslideLineStart
+syn match  goslideJobs       '^\%7l.*$' contains=goslideLineStart
+syn match  goslideMail       '^\%8l.*$' contains=goslideLineStart
+syn match  goslideAuthorUrl  '^\%9l.*$' contains=goslideLineStart
+syn match  goslideTwitter   '^\%10l.*$' contains=goslideLineStart
 
 
 " Go Present Preproc:
-syn region slideCodeLink        matchgroup=slideCodeDelimiter  start=/\v^\.code/ end="$"  oneline keepend skipwhite contained
-syn region slidePlayLink        matchgroup=slidePlayDelimiter  start=/\v^\.play/ end="$"  oneline keepend skipwhite contained
-syn region slideImage           matchgroup=slideImageDelimiter  start=/\v^\.image/ end="$" oneline keepend nextgroup=slideImageLink skipwhite contained
-syn region slideImageLink       matchgroup=slideImageDelimiter start=" " end=" " oneline keepend contained
-syn region slideImageSize       matchgroup=slideImageDelimiter start=/\v^\.image/ end="$" oneline keepend contained nextgroup=slideImageLink,slideImageSize skipwhite contains=slideLineStart,@slideInline,slideImageLink,slideImageSize
-syn region slideBackgroundLink  matchgroup=slideBackgroundDelimiter  start=/\v^\.background/ end="$"  oneline keepend skipwhite contained
-syn region slideIframeLink      matchgroup=slideIframeDelimiter  start=/\v^\.iframe/ end="$"  oneline keepend skipwhite contained
-syn region slideVideoLink       matchgroup=slideVideoDelimiter  start=/\v^\.video/ end="$"  oneline keepend skipwhite contained
-syn match  slideLink            /\v^\.link\s/
-syn region slideHtmlLink        matchgroup=slideHtmlDelimiter  start=/\v^\.html/ end="$"  oneline keepend skipwhite contained
-syn region slideCaption         matchgroup=slideCaptionDelimiter start=/\v^\.caption/ end="$" oneline keepend skipwhite contained
+syn region goslideCodeLink        matchgroup=goslideCodeDelimiter  start=/\v^\.code/ end="$"  oneline keepend skipwhite contained
+syn region goslidePlayLink        matchgroup=goslidePlayDelimiter  start=/\v^\.play/ end="$"  oneline keepend skipwhite contained
+syn region goslideImage           matchgroup=goslideImageDelimiter  start=/\v^\.image/ end="$" oneline keepend nextgroup=goslideImageLink skipwhite contained
+syn region goslideImageLink       matchgroup=goslideImageDelimiter start=" " end=" " oneline keepend contained
+syn region goslideImageSize       matchgroup=goslideImageDelimiter start=/\v^\.image/ end="$" oneline keepend contained nextgroup=goslideImageLink,goslideImageSize skipwhite contains=goslideLineStart,@goslideInline,goslideImageLink,goslideImageSize
+syn region goslideBackgroundLink  matchgroup=goslideBackgroundDelimiter  start=/\v^\.background/ end="$"  oneline keepend skipwhite contained
+syn region goslideIframeLink      matchgroup=goslideIframeDelimiter  start=/\v^\.iframe/ end="$"  oneline keepend skipwhite contained
+syn region goslideVideoLink       matchgroup=goslideVideoDelimiter  start=/\v^\.video/ end="$"  oneline keepend skipwhite contained
+syn match  goslideLink            /\v^\.link\s/
+syn region goslideHtmlLink        matchgroup=goslideHtmlDelimiter  start=/\v^\.html/ end="$"  oneline keepend skipwhite contained
+syn region goslideCaption         matchgroup=goslideCaptionDelimiter start=/\v^\.caption/ end="$" oneline keepend skipwhite contained
 
 
 " Valid:
-syn match slideValid '[<>]\c[a-z/$!]\@!'
-syn match slideValid '&\%(#\=\w*;\)\@!'
+syn match goslideValid '[<>]\c[a-z/$!]\@!'
+syn match goslideValid '&\%(#\=\w*;\)\@!'
 
 
-syn match slideLineStart "^[<@]\@!" nextgroup=@slideBlock,htmlSpecialChar
-syn cluster slideBlock contains=slideTitle,slideSubTitle,slideDate,slideTags,slideName,slideJobs,slideMail,slideAuthorUrl,slideTwitter,slideH1,slideH2,slideH3,slideBlockquote,slideListMarker,slideOrderedListMarker,slideCodeBlock,slideRule,slideCodeLink,slidePlayDelimiter,slideImage,slideImageDelimiter,slideImageLink,slideImageSize,slideBackground,slideIframeLink,slideVideoLink,slideLink,slideHtml,slideCaption
-syn cluster slideInline contains=slideLineBreak,slideLinkText,slideItalic,slideBold,slideBoldItalic,slideCode,slideEscape,@htmlTop,slideError
+syn match goslideLineStart "^[<@]\@!" nextgroup=@goslideBlock,htmlSpecialChar
+syn cluster goslideBlock contains=goslideTitle,goslideSubTitle,goslideDate,goslideTags,goslideName,goslideJobs,goslideMail,goslideAuthorUrl,goslideTwitter,goslideH1,goslideH2,goslideH3,goslideBlockquote,goslideListMarker,goslideOrderedListMarker,goslideCodeBlock,goslideRule,goslideCodeLink,goslidePlayDelimiter,goslideImage,goslideImageDelimiter,goslideImageLink,goslideImageSize,goslideBackground,goslideIframeLink,goslideVideoLink,goslideLink,goslideHtml,goslideCaption
+syn cluster goslideInline contains=goslideLineBreak,goslideLinkText,goslideItalic,goslideBold,goslideBoldItalic,goslideCode,goslideEscape,@htmlTop,goslideError
 
 
 " Header:
-syn match slideHeadingRule "^[=-]\+$" contained
-syn region slideH1 matchgroup=slideHeadingDelimiter start="\*\s#\@!"      end="#*\s*$" keepend oneline contains=slideLineStart,@slideInline,slideAutomaticLink contained
-syn region slideH2 matchgroup=slideHeadingDelimiter start="\*\*\s#\@!"     end="#*\s*$" keepend oneline contains=slideLineStart,@slideInline,slideAutomaticLink contained
-syn region slideH3 matchgroup=slideHeadingDelimiter start="\*\*\*\s#\@!"    end="#*\s*$" keepend oneline contains=slideLineStart,@slideInline,slideAutomaticLink contained
+syn match goslideHeadingRule "^[=-]\+$" contained
+syn region goslideH1 matchgroup=goslideHeadingDelimiter start="\*\s#\@!"      end="#*\s*$" keepend oneline contains=goslideLineStart,@goslideInline,goslideAutomaticLink contained
+syn region goslideH2 matchgroup=goslideHeadingDelimiter start="\*\*\s#\@!"     end="#*\s*$" keepend oneline contains=goslideLineStart,@goslideInline,goslideAutomaticLink contained
+syn region goslideH3 matchgroup=goslideHeadingDelimiter start="\*\*\*\s#\@!"    end="#*\s*$" keepend oneline contains=goslideLineStart,@goslideInline,goslideAutomaticLink contained
 
 
 " Blockquote:
-syn match slideBlockquote ">\%(\s\|$\)" contained nextgroup=@slideBlock
+syn match goslideBlockquote ">\%(\s\|$\)" contained nextgroup=@goslideBlock
 
 
 " ListMarker:
-syn match slideListMarker "\%(\t\| \{0,4\}\)[-]\%(\s\+\S\)\@=" contained
-syn match slideOrderedListMarker "\%(\t\| \{0,4}\)\<\d\+\.\%(\s\+\S\)\@=" contained
+syn match goslideListMarker "\%(\t\| \{0,4\}\)[-]\%(\s\+\S\)\@=" contained
+syn match goslideOrderedListMarker "\%(\t\| \{0,4}\)\<\d\+\.\%(\s\+\S\)\@=" contained
 
 
 " Rule:
-syn match slideRule "\* *\* *\*[ *]*$" contained
-syn match slideRule "- *- *-[ -]*$" contained
+syn match goslideRule "\* *\* *\*[ *]*$" contained
+syn match goslideRule "- *- *-[ -]*$" contained
 
 
 " LineBreak:
-syn match slideLineBreak " \{2,\}$"
+syn match goslideLineBreak " \{2,\}$"
 
 
 " Url:
-syn region slideIdDeclaration matchgroup=slideLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=slideUrl skipwhite
-syn match  slideUrl "\S\+" nextgroup=slideUrlTitle skipwhite contained
-syn region slideUrl matchgroup=slideUrlDelimiter start="<" end=">" oneline keepend nextgroup=slideUrlTitle skipwhite contained
-syn region slideUrlTitle matchgroup=slideUrlTitleDelimiter start=+"+ end=+"+ keepend contained
-syn region slideUrlTitle matchgroup=slideUrlTitleDelimiter start=+'+ end=+'+ keepend contained
-syn region slideUrlTitle matchgroup=slideUrlTitleDelimiter start=+(+ end=+)+ keepend contained
+syn region goslideIdDeclaration matchgroup=goslideLinkDelimiter start="^ \{0,3\}!\=\[" end="\]:" oneline keepend nextgroup=goslideUrl skipwhite
+syn match  goslideUrl "\S\+" nextgroup=goslideUrlTitle skipwhite contained
+syn region goslideUrl matchgroup=goslideUrlDelimiter start="<" end=">" oneline keepend nextgroup=goslideUrlTitle skipwhite contained
+syn region goslideUrlTitle matchgroup=goslideUrlTitleDelimiter start=+"+ end=+"+ keepend contained
+syn region goslideUrlTitle matchgroup=goslideUrlTitleDelimiter start=+'+ end=+'+ keepend contained
+syn region goslideUrlTitle matchgroup=goslideUrlTitleDelimiter start=+(+ end=+)+ keepend contained
 
 " Link:
-syn region slideLinkText matchgroup=slideLinkTextDelimiter start="!\=\[\%(\_[^]]*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" keepend nextgroup=slideLink,slideId skipwhite contains=slideLineStart,@slideInline
-syn region slideLink matchgroup=slideLinkDelimiter start="(" end=")" contains=slideUrl keepend contained
-syn region slideId matchgroup=slideIdDelimiter start="\[" end="\]" keepend contained
+syn region goslideLinkText matchgroup=goslideLinkTextDelimiter start="!\=\[\%(\_[^]]*]\%( \=[[(]\)\)\@=" end="\]\%( \=[[(]\)\@=" keepend nextgroup=goslideLink,goslideId skipwhite contains=goslideLineStart,@goslideInline
+syn region goslideLink matchgroup=goslideLinkDelimiter start="(" end=")" contains=goslideUrl keepend contained
+syn region goslideId matchgroup=goslideIdDelimiter start="\[" end="\]" keepend contained
 
-syn region slideAutomaticLink matchgroup=slideUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
+syn region goslideAutomaticLink matchgroup=goslideUrlDelimiter start="<\%(\w\+:\|[[:alnum:]_+-]\+@\)\@=" end=">" keepend oneline
 
 
 " Bold: *foo*
-syn region slideBold start="\S\@<=\*\|\*\S\w\@=" end="\S\w\@<=\*\|\*\S\w\@=" keepend oneline
+syn region goslideBold start="\S\@<=\*\|\*\S\w\@=" end="\S\w\@<=\*\|\*\S\w\@=" keepend oneline
 " Italic: _foo_
-syn region slideItalic start="\S\@<=_\|_\S\w\@=" end="\S\w\@<=_\|_\S\w\@=" keepend oneline
+syn region goslideItalic start="\S\@<=_\|_\S\w\@=" end="\S\w\@<=_\|_\S\w\@=" keepend oneline
 " BoldItalic: '*_foo_*' or '_*foo*_'
-" syn region slideBoldItalic start="\S\@<=\*_\|\*_\S\w\@=" end="\S\w\@<=\*_\|\*_\S\w\@=" keepend
-" syn region slideBoldItalic start="\S\@<=_\*\|_\*\S\w\@=" end="\S\w\@<=_\*\|_\*\S\w\@=" keepend
+" syn region goslideBoldItalic start="\S\@<=\*_\|\*_\S\w\@=" end="\S\w\@<=\*_\|\*_\S\w\@=" keepend
+" syn region goslideBoldItalic start="\S\@<=_\*\|_\*\S\w\@=" end="\S\w\@<=_\*\|_\*\S\w\@=" keepend
 
 
 " Inline Code:
-syn region slideCodeBlock matchgroup=slideCodeDelimiter start="    \|\t" end="$" keepend contains=@slideHighlightsh
-syn region slideCode matchgroup=slideCodeDelimiter start="`" end="`" keepend contains=slideLineStart
-syn region slideCode matchgroup=slideCodeDelimiter start="`` \=" end=" \=``" keepend contains=slideLineStart
-syn region slideCode matchgroup=slideCodeDelimiter start="^\s*```.*$" end="^\s*```\ze\s*$" keepend
+syn region goslideCodeBlock matchgroup=goslideCodeDelimiter start="    \|\t" end="$" keepend contains=@goslideHighlightsh
+syn region goslideCode matchgroup=goslideCodeDelimiter start="`" end="`" keepend contains=goslideLineStart
+syn region goslideCode matchgroup=goslideCodeDelimiter start="`` \=" end=" \=``" keepend contains=goslideLineStart
+syn region goslideCode matchgroup=goslideCodeDelimiter start="^\s*```.*$" end="^\s*```\ze\s*$" keepend
 
 
 " Code Highlight:
 if main_syntax ==# 'goslide'
-  for s:type in g:slide_fenced_languages
-    exe 'syn region slideHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=slideCodeDelimiter start="^\s*```'.matchstr(s:type,'[^=]*').'\>.*$" end="^\s*```\ze\s*$" keepend contains=@slideHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
+  for s:type in g:goslide_fenced_languages
+    exe 'syn region goslideHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\..*','','').' matchgroup=goslideCodeDelimiter start="^\s*```'.matchstr(s:type,'[^=]*').'\>.*$" end="^\s*```\ze\s*$" keepend contains=@goslideHighlight'.substitute(matchstr(s:type,'[^=]*$'),'\.','','g')
   endfor
   unlet! s:type
 endif
 
 " Escape:
-syn match slideEscape "\\[][\\`*_{}()#+.!-]"
+syn match goslideEscape "\\[][\\`*_{}()#+.!-]"
 " Error:
-syn match slideError "\w\@<=\w\@="
+syn match goslideError "\w\@<=\w\@="
 
 
 " Highlight:
-hi def link slideTitle                 htmlH1
-hi def link slideSubTitle              htmlH2
-hi def link slideDate                  Number
-hi def link slideTags                  PreProc
-hi def link slideName                  Delimiter
-hi def link slideJobs                  String
-hi def link slideMail                  htmlLink
-hi def link slideAuthorUrl             htmlLink
-hi def link slideTwitter               htmlLink
+hi def link goslideTitle                 htmlH1
+hi def link goslideSubTitle              htmlH2
+hi def link goslideDate                  Number
+hi def link goslideTags                  PreProc
+hi def link goslideName                  Delimiter
+hi def link goslideJobs                  String
+hi def link goslideMail                  htmlLink
+hi def link goslideAuthorUrl             htmlLink
+hi def link goslideTwitter               htmlLink
 
 
-hi def link slideCodeDelimiter         PreProc
-hi def link slideCodeLink              htmlLink
-hi def link slidePlayDelimiter         PreProc
-hi def link slidePlayLink              htmlLink
-hi def link slideImageDelimiter        PreProc
-hi def link slideImageLink             htmlLink
-hi def link slideImageSize             Number
-hi def link slideBackgroundDelimiter   PreProc
-hi def link slideBackgroundLink        htmlLink
-hi def link slideIframeDelimiter       PreProc
-hi def link slideIframeLink            htmlLink
-hi def link slideLink                  PreProc
-hi def link slideHtmlDelimiter         PreProc
-hi def link slideHtmlLink              htmlLink
-hi def link slideVideoDelimiter        PreProc
-hi def link slideVideoLink             htmlLink
-hi def link slideCaptionDelimiter      PreProc
-hi def link slideCaption               String
+hi def link goslideCodeDelimiter         PreProc
+hi def link goslideCodeLink              htmlLink
+hi def link goslidePlayDelimiter         PreProc
+hi def link goslidePlayLink              htmlLink
+hi def link goslideImageDelimiter        PreProc
+hi def link goslideImageLink             htmlLink
+hi def link goslideImageSize             Number
+hi def link goslideBackgroundDelimiter   PreProc
+hi def link goslideBackgroundLink        htmlLink
+hi def link goslideIframeDelimiter       PreProc
+hi def link goslideIframeLink            htmlLink
+hi def link goslideLink                  PreProc
+hi def link goslideHtmlDelimiter         PreProc
+hi def link goslideHtmlLink              htmlLink
+hi def link goslideVideoDelimiter        PreProc
+hi def link goslideVideoLink             htmlLink
+hi def link goslideCaptionDelimiter      PreProc
+hi def link goslideCaption               String
 
 
-hi def link slideH1                    htmlH1
-hi def link slideH2                    htmlH2
-hi def link slideH3                    htmlH3
-hi def link slideHeadingRule           slideRule
-hi def link slideHeadingDelimiter      Delimiter
-hi def link slideOrderedListMarker     slideListMarker
-hi def link slideListMarker            htmlTagName
-hi def link slideBlockquote            Comment
-hi def link slideRule                  PreProc
+hi def link goslideH1                    htmlH1
+hi def link goslideH2                    htmlH2
+hi def link goslideH3                    htmlH3
+hi def link goslideHeadingRule           goslideRule
+hi def link goslideHeadingDelimiter      Delimiter
+hi def link goslideOrderedListMarker     goslideListMarker
+hi def link goslideListMarker            htmlTagName
+hi def link goslideBlockquote            Comment
+hi def link goslideRule                  PreProc
 
-hi def link slideLinkText              htmlLink
-hi def link slideIdDeclaration         Typedef
-hi def link slideId                    Type
-hi def link slideAutomaticLink         slideUrl
-hi def link slideUrl                   Float
-hi def link slideUrlTitle              String
-hi def link slideIdDelimiter           slideLinkDelimiter
-hi def link slideUrlDelimiter          htmlTag
-hi def link slideUrlTitleDelimiter     Delimiter
+hi def link goslideLinkText              htmlLink
+hi def link goslideIdDeclaration         Typedef
+hi def link goslideId                    Type
+hi def link goslideAutomaticLink         goslideUrl
+hi def link goslideUrl                   Float
+hi def link goslideUrlTitle              String
+hi def link goslideIdDelimiter           goslideLinkDelimiter
+hi def link goslideUrlDelimiter          htmlTag
+hi def link goslideUrlTitleDelimiter     Delimiter
 
-hi def link slideItalic                htmlItalic
-hi def link slideBold                  htmlBold
-hi def link slideBoldItalic            htmlBoldItalic
-hi def link slideCodeDelimiter         Delimiter
+hi def link goslideItalic                htmlItalic
+hi def link goslideBold                  htmlBold
+hi def link goslideBoldItalic            htmlBoldItalic
+hi def link goslideCodeDelimiter         Delimiter
 
-hi def link slideEscape                Special
-hi def link slideError                 Error
+hi def link goslideEscape                Special
+hi def link goslideError                 Error
 
 let b:current_syntax = "goslide"
 if main_syntax ==# 'goslide'
